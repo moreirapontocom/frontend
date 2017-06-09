@@ -102,9 +102,9 @@
         </div>
     </footer>
 
-    <div id="loading-template">
+    <script type="text/template" id="loading-template">
         <div id="loading"><div><i class="fa fa-code"></i></div></div>
-    </div>
+    </script>
 
     <script src="assets/vendor/jquery/dist/jquery.min.js"></script>
     <script src="assets/vendor/json2/json2.js"></script>
@@ -128,7 +128,30 @@
         });
 
         // Model
-        MyBlog.myModel = Backbone.Model.extend({});
+        MyBlog.myModel = Backbone.Model.extend({
+            defaults: {
+                ID: 0,
+                post_date: '',
+                post_content: '',
+                post_title: '',
+                post_excerpt: '',
+                post_name: '',
+                menu_order: 0,
+                comment_count: 0
+            },
+            idAttribute: 'post_name',
+            sync: function(method, model, options) {
+                var that = this,
+                    params = _.extend({
+                        method: 'GET',
+                        dataType: 'jsonp',
+                        url: that.url,
+                        processData: false
+                    }, options);
+    
+                return $.ajax( params );
+            }
+        });
         // Collection de models
         MyBlog.myCollection = Backbone.Collection.extend({
             model: MyBlog.myModel
@@ -146,30 +169,56 @@
             childView: MyBlog.myItemView
         });
 
-        // // ItemView Loading
-        // MyBlog.loadingView = Marionette.ItemView.extend({
-        //     template: '#loading-template'
-        // });
-        // var theLoadingView = new MyBlog.loadingView();
-        // MyBlog.mainRegion.show( theLoadingView );
+        var posts;
+        var defer = $.Deferred();
+        MyBlog.fetchPosts = function() {
+
+            posts = new MyBlog.myCollection();
+            posts.fetch({
+                method: 'GET',
+                dataType: 'jsonp',
+                processData: false,
+                url: 'http://api.lucasmoreira.com.br/post',
+                success: function(collection, response, options) {
+
+                    posts = response;
+                    defer.resolve( posts );
+
+                    return defer.promise();
+
+                },
+                error: function(err, xhr) {
+                    console.log('error');
+                }
+            });
+
+        }
+
+        // ItemView Loading
+        MyBlog.loadingView = Marionette.ItemView.extend({
+            template: '#loading-template'
+        });
+        var theLoadingView = new MyBlog.loadingView();
+        MyBlog.mainRegion.show( theLoadingView );
 
         MyBlog.on('start', function() {
 
-            // Instancio a collection de Models
-            var posts = new MyBlog.myCollection([
-                { post_title: 'titulo 1', post_excerpt: 'resumo 1' },
-                { post_title: 'titulo 2', post_excerpt: 'resumo 2' }
-            ]);
+            if ( !posts || posts == '' ) {
 
-            // Instancio a collection de ItemViews
-            var list = new MyBlog.listPosts({
-                collection: posts
-            });
+                var fetchFromAPI = MyBlog.fetchPosts();
+                $.when( fetchFromAPI ).done(function(fetchFromAPI) {
 
-            setTimeout(function() {
-                MyBlog.mainRegion.show( list );
-                $('#loading-template').hide();
-            }, 3000);
+                    // Instancio a collection de ItemViews
+                    // A collection posts vem lá da promise()
+                    var list = new MyBlog.listPosts({
+                        collection: posts
+                    });
+
+                    MyBlog.mainRegion.show( list );
+
+                });
+
+            }
 
         });
 
