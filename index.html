@@ -63,7 +63,17 @@
                 <summary>
                     {{ post_excerpt }}
                 </summary>
-                <button class="btn-read-more">read more</button>
+                <button class="btn-read-more js-read-more">read more</button>
+            </script>
+
+            <script type="text/template" id="single-post-full-template">
+                <h1>{{ post_title }}</h1>
+                <summary>
+                    {{ post_excerpt }}
+                </summary>
+                <p>
+                    {{ post_content }}
+                </p>
             </script>
 
         </div>

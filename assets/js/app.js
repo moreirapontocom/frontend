@@ -8,6 +8,13 @@ MyBlog.addRegions({
     mainRegion: '#main-region'
 });
 
+// ItemView Loading
+MyBlog.loadingView = Marionette.ItemView.extend({
+    template: '#loading-template'
+});
+var theLoadingView = new MyBlog.loadingView();
+MyBlog.mainRegion.show( theLoadingView );
+
 // Model
 MyBlog.myModel = Backbone.Model.extend({
     defaults: {
@@ -41,14 +48,51 @@ MyBlog.myCollection = Backbone.Collection.extend({
 // ItemView
 MyBlog.myItemView = Marionette.ItemView.extend({
     tagName: 'li',
-    template: '#single-post-in-list-template'
+    template: '#single-post-in-list-template',
+    events: {
+        'click .js-read-more': 'openSinglePost'
+    },
+    openSinglePost: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // console.log(this.model);
+        // console.log(this.model.id);
+
+        var singleModel = Backbone.Model.extend({});
+        var singleCollection = Backbone.Collection.extend({
+            model: singleModel
+        });
+
+        // ItemView do post completo
+        var fullItemView = Marionette.ItemView.extend({
+            template: '#single-post-full-template'
+        });
+        var collectionFullView = Marionette.CollectionView.extend({
+            childView: fullItemView
+        });
+
+        var theModel = new singleCollection([
+            new singleModel(this.model.attributes)
+        ]);
+        var fullPost = new collectionFullView({
+            collection: theModel
+        });
+
+        Backbone.history.navigate( this.model.id );
+
+        MyBlog.mainRegion.show( fullPost );
+    }
 });
+
 // ItemCollection
 MyBlog.listPosts = Marionette.CollectionView.extend({
     tagName: 'ul',
     className: 'post-list',
     childView: MyBlog.myItemView
 });
+
+
 
 var posts;
 var defer = $.Deferred();
@@ -75,14 +119,10 @@ MyBlog.fetchPosts = function() {
 
 }
 
-// ItemView Loading
-MyBlog.loadingView = Marionette.ItemView.extend({
-    template: '#loading-template'
-});
-var theLoadingView = new MyBlog.loadingView();
-MyBlog.mainRegion.show( theLoadingView );
 
 MyBlog.on('start', function() {
+    if ( Backbone.history )
+        Backbone.history.start();
 
     if ( !posts || posts == '' ) {
 
