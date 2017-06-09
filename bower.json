@@ -1,0 +1,29 @@
+{
+  "name": "theme",
+  "authors": [
+    "Lucas Moreira <moreirapontocom@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "flexboxgrid": "^6.3.2",
+    "jquery": "^3.2.1",
+    "json2": "*",
+    "underscore": "1.6.0",
+    "backbone": "1.1.2",
+    "backbone.marionette": "2.4.7",
+    "bootstrap": "^3.3.7",
+    "font-awesome": "fontawesome#^4.7.0",
+    "backbone.syphon": "https://raw.githubusercontent.com/derickbailey/backbone.syphon/master/lib/backbone.syphon.js",
+    "bounce.js": "^0.8.2"
+  }
+}
