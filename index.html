@@ -55,6 +55,18 @@
 
         <div class="container">
 
+            <!--Posts come here-->
+            <div id="main-region"></div>
+
+            <script type="text/template" id="single-post-in-list-template">
+                <h1>{{ post_title }}</h1>
+                <summary>
+                    {{ post_excerpt }}
+                </summary>
+                <button class="btn-read-more">read more</button>
+            </script>
+
+            <!--
             <ul class="post-list">
                 <li>
                     <h1>Este é o título de um post</h1>
@@ -78,6 +90,7 @@
                     <h1>Este é o título de um post</h1>
                 </li>
             </ul>
+            -->
         
         </div>
 
@@ -89,25 +102,78 @@
         </div>
     </footer>
 
-    <div id="loading">
-        <div>
-            <i class="fa fa-code"></i>
-        </div>
+    <div id="loading-template">
+        <div id="loading"><div><i class="fa fa-code"></i></div></div>
     </div>
 
     <script src="assets/vendor/jquery/dist/jquery.min.js"></script>
-    <!--
     <script src="assets/vendor/json2/json2.js"></script>
     <script src="assets/vendor/underscore/underscore.js"></script>
     <script src="assets/vendor/backbone/backbone.js"></script>
     <script src="assets/vendor/backbone.marionette/lib/backbone.marionette.min.js"></script>
-    -->
+
     <script src="assets/vendor/bounce.js/bounce.min.js"></script>
 
     <!--<script src="assets/js/app.js"></script>-->
 
     <script>
-        // Jungle.start();
+        _.templateSettings = {
+            interpolate: /\{\{(.+?)\}\}/g
+        };
+
+        var MyBlog = new Marionette.Application();
+
+        MyBlog.addRegions({
+            mainRegion: '#main-region'
+        });
+
+        // Model
+        MyBlog.myModel = Backbone.Model.extend({});
+        // Collection de models
+        MyBlog.myCollection = Backbone.Collection.extend({
+            model: MyBlog.myModel
+        });
+
+        // ItemView
+        MyBlog.myItemView = Marionette.ItemView.extend({
+            tagName: 'li',
+            template: '#single-post-in-list-template'
+        });
+        // ItemCollection
+        MyBlog.listPosts = Marionette.CollectionView.extend({
+            tagName: 'ul',
+            className: 'post-list',
+            childView: MyBlog.myItemView
+        });
+
+        // // ItemView Loading
+        // MyBlog.loadingView = Marionette.ItemView.extend({
+        //     template: '#loading-template'
+        // });
+        // var theLoadingView = new MyBlog.loadingView();
+        // MyBlog.mainRegion.show( theLoadingView );
+
+        MyBlog.on('start', function() {
+
+            // Instancio a collection de Models
+            var posts = new MyBlog.myCollection([
+                { post_title: 'titulo 1', post_excerpt: 'resumo 1' },
+                { post_title: 'titulo 2', post_excerpt: 'resumo 2' }
+            ]);
+
+            // Instancio a collection de ItemViews
+            var list = new MyBlog.listPosts({
+                collection: posts
+            });
+
+            setTimeout(function() {
+                MyBlog.mainRegion.show( list );
+                $('#loading-template').hide();
+            }, 3000);
+
+        });
+
+        MyBlog.start();
     </script>
 
 </body>
