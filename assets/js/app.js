@@ -8,6 +8,20 @@ MyBlog.addRegions({
     mainRegion: '#main-region'
 });
 
+// MyBlog.Router =  Marionette.AppRouter.extend({
+//     appRoutes: {
+//         '': 'listPosts',
+//         ':post_name': 'listSingle'
+//     },
+
+//     listPosts: function() {
+//         console.log('list all posts');
+//     },
+//     listSingle: function(post_name) {
+//         console.log('list single post: ', post_name);
+//     }
+// });
+
 // ItemView Loading
 MyBlog.loadingView = Marionette.ItemView.extend({
     template: '#loading-template'
