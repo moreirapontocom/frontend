@@ -1,13 +1,11 @@
 module.exports = function(grunt) {
 
-	// grunt.loadNpmTasks('grunt-contrib-uglify');
-
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-	// grunt.registerTask("default", ["cssmin","uglify","watch"]);
-    grunt.registerTask('default', ['less','cssmin','watch']);
+    grunt.registerTask('default', ['less','cssmin','uglify','watch']);
 
 	grunt.initConfig({
 
@@ -30,41 +28,36 @@ module.exports = function(grunt) {
 			}
 		},
 
+		uglify: {
+			options: {
+				mangle: false
+			},
+			js: {
+				files: {
+					'js/scripts.min.js': [
+					   'assets/vendor/jquery/dist/jquery.min.js',
+					   'assets/vendor/json2/json2.js',
+					   'assets/vendor/underscore/underscore.js',
+					   'assets/vendor/backbone/backbone.js',
+					   'assets/vendor/backbone.marionette/lib/backbone.marionette.min.js',
+					   'assets/vendor/bounce.js/bounce.min.js',
+					   'assets/js/app.js'
+					 ]
+				}
+			}
+		},
+
         watch: {
 			scripts: {
-				files: ['assets/css/*.less'],
-				tasks: ['less','cssmin']
+				files: ['assets/css/*.less','assets/js/*.js'],
+				tasks: ['less','cssmin','uglify']
 			},
 			options: {
 				debounceDelay: 1,
 			}
 		},
 
-		// uglify: {
-		// 	options: {
-		// 		mangle: false
-		// 	},
-		// 	js: {
-		// 		files: {
-		// 			'public/js/scripts.min.js': [
-		// 			   'public/packages/jquery/dist/jquery.min.js',
-		// 			   'public/theme/assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js',
-		// 			   'public/theme/assets/js/main.js',
-
-		// 			   'public/packages/bootstrap/dist/js/bootstrap.min.js',
-		// 			   'public/theme/assets/lib/summernote/summernote.min.js',
-		// 			   'public/theme/assets/lib/summernote/summernote-ext-beagle.js',
-
-		// 			   'public/theme/assets/lib/bootstrap-markdown/js/bootstrap-markdown.js',
-		// 			   'public/theme/assets/lib/markdown-js/markdown.js',
-
-		// 			   'public/packages/jquery-ui/jquery-ui.min.js',
-
-		// 			   'app/storage/assets/js/scripts.js'
-		// 			 ]
-		// 		}
-		// 	}
-		// },
+		
 
 		// watch: {
 		// 	scripts: {

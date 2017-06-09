@@ -66,32 +66,6 @@
                 <button class="btn-read-more">read more</button>
             </script>
 
-            <!--
-            <ul class="post-list">
-                <li>
-                    <h1>Este é o título de um post</h1>
-                    <summary>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus vel omnis distinctio, enim perspiciatis aliquam nemo consequuntur itaque facilis recusandae nihil fuga voluptatum impedit dolorum voluptate quas, dolorem iure expedita.
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus vel omnis distinctio, enim perspiciatis aliquam nemo consequuntur itaque facilis recusandae nihil fuga voluptatum impedit dolorum voluptate quas, dolorem iure expedita.
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus vel omnis distinctio, enim perspiciatis aliquam nemo consequuntur itaque facilis recusandae nihil fuga voluptatum impedit dolorum voluptate quas, dolorem iure expedita.
-                    </summary>
-                    <button class="btn-read-more">read more</button>
-                </li>
-                <li class="featured">
-                    <h1>Este é o título de um post</h1>
-                    <summary>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus vel omnis distinctio, enim perspiciatis aliquam nemo consequuntur itaque facilis recusandae nihil fuga voluptatum impedit dolorum voluptate quas, dolorem iure expedita.
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus vel omnis distinctio, enim perspiciatis aliquam nemo consequuntur itaque facilis recusandae nihil fuga voluptatum impedit dolorum voluptate quas, dolorem iure expedita.
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus vel omnis distinctio, enim perspiciatis aliquam nemo consequuntur itaque facilis recusandae nihil fuga voluptatum impedit dolorum voluptate quas, dolorem iure expedita.
-                    </summary>
-                    <button class="btn-read-more">read more</button>
-                </li>
-                <li class="featured">
-                    <h1>Este é o título de um post</h1>
-                </li>
-            </ul>
-            -->
-        
         </div>
 
     </section>
@@ -106,122 +80,9 @@
         <div id="loading"><div><i class="fa fa-code"></i></div></div>
     </script>
 
-    <script src="assets/vendor/jquery/dist/jquery.min.js"></script>
-    <script src="assets/vendor/json2/json2.js"></script>
-    <script src="assets/vendor/underscore/underscore.js"></script>
-    <script src="assets/vendor/backbone/backbone.js"></script>
-    <script src="assets/vendor/backbone.marionette/lib/backbone.marionette.min.js"></script>
-
-    <script src="assets/vendor/bounce.js/bounce.min.js"></script>
-
-    <!--<script src="assets/js/app.js"></script>-->
+    <script src="js/scripts.min.js"></script>
 
     <script>
-        _.templateSettings = {
-            interpolate: /\{\{(.+?)\}\}/g
-        };
-
-        var MyBlog = new Marionette.Application();
-
-        MyBlog.addRegions({
-            mainRegion: '#main-region'
-        });
-
-        // Model
-        MyBlog.myModel = Backbone.Model.extend({
-            defaults: {
-                ID: 0,
-                post_date: '',
-                post_content: '',
-                post_title: '',
-                post_excerpt: '',
-                post_name: '',
-                menu_order: 0,
-                comment_count: 0
-            },
-            idAttribute: 'post_name',
-            sync: function(method, model, options) {
-                var that = this,
-                    params = _.extend({
-                        method: 'GET',
-                        dataType: 'jsonp',
-                        url: that.url,
-                        processData: false
-                    }, options);
-    
-                return $.ajax( params );
-            }
-        });
-        // Collection de models
-        MyBlog.myCollection = Backbone.Collection.extend({
-            model: MyBlog.myModel
-        });
-
-        // ItemView
-        MyBlog.myItemView = Marionette.ItemView.extend({
-            tagName: 'li',
-            template: '#single-post-in-list-template'
-        });
-        // ItemCollection
-        MyBlog.listPosts = Marionette.CollectionView.extend({
-            tagName: 'ul',
-            className: 'post-list',
-            childView: MyBlog.myItemView
-        });
-
-        var posts;
-        var defer = $.Deferred();
-        MyBlog.fetchPosts = function() {
-
-            posts = new MyBlog.myCollection();
-            posts.fetch({
-                method: 'GET',
-                dataType: 'jsonp',
-                processData: false,
-                url: 'http://api.lucasmoreira.com.br/post',
-                success: function(collection, response, options) {
-
-                    posts = response;
-                    defer.resolve( posts );
-
-                    return defer.promise();
-
-                },
-                error: function(err, xhr) {
-                    console.log('error');
-                }
-            });
-
-        }
-
-        // ItemView Loading
-        MyBlog.loadingView = Marionette.ItemView.extend({
-            template: '#loading-template'
-        });
-        var theLoadingView = new MyBlog.loadingView();
-        MyBlog.mainRegion.show( theLoadingView );
-
-        MyBlog.on('start', function() {
-
-            if ( !posts || posts == '' ) {
-
-                var fetchFromAPI = MyBlog.fetchPosts();
-                $.when( fetchFromAPI ).done(function(fetchFromAPI) {
-
-                    // Instancio a collection de ItemViews
-                    // A collection posts vem lá da promise()
-                    var list = new MyBlog.listPosts({
-                        collection: posts
-                    });
-
-                    MyBlog.mainRegion.show( list );
-
-                });
-
-            }
-
-        });
-
         MyBlog.start();
     </script>
 
