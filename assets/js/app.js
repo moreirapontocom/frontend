@@ -11,56 +11,40 @@ MyBlog.addRegions({
 var API = {
 
     listAllPosts: function() {
-        console.log('API: list all posts');
 
-        if ( !posts || posts == '' ) {
+        var fetchFromAPI = MyBlog.fetchPosts();
+        $.when( fetchFromAPI ).done(function(fetchFromAPI) {
 
-            var fetchFromAPI = MyBlog.fetchPosts();
-            $.when( fetchFromAPI ).done(function(fetchFromAPI) {
-
-                // Instancio a collection de ItemViews
-                // A collection posts vem lá da promise()
-                var list = new MyBlog.listPosts({
-                    collection: posts
-                });
-
-                MyBlog.mainRegion.show( list );
-
+            // Instancio a collection de ItemViews
+            // A collection posts vem lá da promise()
+            var list = new MyBlog.listPosts({
+                collection: MyBlog.posts
             });
 
-        }
+            MyBlog.mainRegion.show( list );
+
+        });
 
     },
 
-    listSinglePost: function(post_name) {
-        console.log('API: list single: ', post_name);
+    listSinglePost: function(model) {
 
-        // var post_model = posts.get( post_name );
-        // console.log( post_model );
-
-        var singleModel = Backbone.Model.extend({});
-        var singleCollection = Backbone.Collection.extend({
-            model: singleModel
-        });
-
-        // ItemView do post completo
-        var fullItemView = Marionette.ItemView.extend({
+        var single = Marionette.ItemView.extend({
             template: '#single-post-full-template'
         });
-        var collectionFullView = Marionette.CollectionView.extend({
-            childView: fullItemView
+        var viewCollection = Marionette.CollectionView.extend({
+            childView: single
         });
 
-        var theModel = new singleCollection([
-            new singleModel( post_model.attributes )
-        ]);
-        var fullPost = new collectionFullView({
-            collection: theModel
+        var collection = new MyBlog.myCollection( model );
+        var view = new viewCollection({
+            collection: collection
         });
 
-        Backbone.history.navigate( this.model.id );
+        Backbone.history.navigate( model.id );
 
-        MyBlog.mainRegion.show( fullPost );
+        MyBlog.mainRegion.show( view );
+
     }
 }
 
@@ -73,8 +57,8 @@ MyBlog.Router =  Marionette.AppRouter.extend({
     listPosts: function() {
         API.listAllPosts();
     },
-    listSingle: function(post_name) {
-        API.listSinglePost(post_name);
+    listSingle: function(model) {
+        API.listSinglePost(model);
     }
 });
 
@@ -126,12 +110,8 @@ MyBlog.myItemView = Marionette.ItemView.extend({
         e.preventDefault();
         e.stopPropagation();
 
-        API.listSinglePost( this.model.id ); // post_name
+        API.listSinglePost( this.model );
 
-        // console.log(this.model);
-        // console.log(this.model.id);
-
-        
     }
 });
 
@@ -144,28 +124,33 @@ MyBlog.listPosts = Marionette.CollectionView.extend({
 
 
 
-var posts;
+MyBlog.posts;
 var defer = $.Deferred();
 MyBlog.fetchPosts = function() {
 
-    posts = new MyBlog.myCollection();
-    posts.fetch({
-        method: 'GET',
-        dataType: 'jsonp',
-        processData: false,
-        url: 'http://api.lucasmoreira.com.br/post',
-        success: function(collection, response, options) {
+    if ( !MyBlog.posts || MyBlog.posts == '' ) {
 
-            posts = response;
-            defer.resolve( posts );
+        MyBlog.posts = new MyBlog.myCollection();
+        MyBlog.posts.fetch({
+            method: 'GET',
+            dataType: 'jsonp',
+            processData: false,
+            url: 'http://api.lucasmoreira.com.br/post',
+            success: function(collection, response, options) {
 
-            return defer.promise();
+                MyBlog.posts = response;
+                defer.resolve( MyBlog.posts );
 
-        },
-        error: function(err, xhr) {
-            console.log('error');
-        }
-    });
+                return defer.promise();
+
+            },
+            error: function(err, xhr) {
+                console.log('error');
+            }
+        });
+    
+    } else
+        return MyBlog.posts;
 
 }
 
