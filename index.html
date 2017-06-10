@@ -17,78 +17,79 @@
 </head>
 <body>
 
-    <header style="display: none">
-        <div class="container">
-            <h1>
-                Hi.<br>
-                I'm Lucas Moreira.<br>
-                <strong>Web developer</strong> and...
-            </h1>
-            <h3>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus vel omnis distinctio, enim perspiciatis aliquam nemo consequuntur itaque facilis recusandae nihil fuga voluptatum impedit dolorum voluptate quas, dolorem iure expedita.
-            </h3>
-            <div class="socials">
-                <ul>
-                    <li>
-                        <a href="" target="_blank">
-                            <i class="fa fa-facebook"></i></li>
-                        </a>
-                    <li>
-                        <a href="" target="_blank">
-                            <i class="fa fa-linkedin"></i></li>
-                        </a>
-                    <li>
-                        <a href="" target="_blank">
-                            <i class="fa fa-github"></i></li>
-                        </a>
-                    <li>
-                        <a href="" target="_blank">
-                            <i class="fa fa-twitter"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </header>
+    <div class="row">
+        <div class="col-lg-5">
+            
+            <header>
+                <div class="container">
+                    <h1>
+                        Hi.<br>
+                        I'm Lucas Moreira.<br>
+                        <strong>Web developer</strong> and...
+                    </h1>
+                    <h3>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus vel omnis distinctio, enim perspiciatis aliquam nemo consequuntur itaque facilis recusandae nihil fuga voluptatum impedit dolorum voluptate quas, dolorem iure expedita.
+                    </h3>
+                    <div class="socials">
+                        <ul>
+                            <li>
+                                <a href="" target="_blank">
+                                    <i class="fa fa-facebook"></i></li>
+                                </a>
+                            <li>
+                                <a href="" target="_blank">
+                                    <i class="fa fa-linkedin"></i></li>
+                                </a>
+                            <li>
+                                <a href="" target="_blank">
+                                    <i class="fa fa-github"></i></li>
+                                </a>
+                            <li>
+                                <a href="" target="_blank">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
 
-    <section id="main-content">
+                    <footer>
+                        lucasmoreira.com.br.
+                    </footer>
 
-        <div class="container">
-
-            <!--Posts come here-->
-            <div id="main-region"></div>
-
-            <script type="text/template" id="single-post-in-list-template">
-                <h1>{{ post_title }}</h1>
-                <summary>
-                    {{ post_excerpt }}
-                </summary>
-                <button class="btn-read-more js-read-more">read more</button>
-            </script>
-
-            <script type="text/template" id="single-post-full-template">
-                <h1>{{ post_title }}</h1>
-                <summary>
-                    {{ post_excerpt }}
-                </summary>
-                <p>
-                    {{ post_content }}
-                </p>
-            </script>
+                </div>
+            </header>
 
         </div>
+        <div class="col-lg-7 main-content">
 
-    </section>
+            <div id="js-main-region"></div>
 
-    <footer>
-        <div class="container">
-            &copy; lucasmoreira.com.br.
         </div>
-    </footer>
+    </div>
 
+    <!--Templates-->
     <script type="text/template" id="loading-template">
         <div id="loading"><div><i class="fa fa-code"></i></div></div>
     </script>
+
+    <script type="text/template" id="single-post-in-list-template">
+        <h1>{{ post_title }}</h1>
+        <summary>
+            {{ post_excerpt }}
+        </summary>
+        <button class="btn-read-more js-read-more">read more</button>
+    </script>
+
+    <script type="text/template" id="single-post-full-template">
+        <h1>{{ post_title }}</h1>
+        <summary>
+            {{ post_excerpt }}
+        </summary>
+        <p>
+            {{ post_content }}
+        </p>
+    </script>
+    <!--Templates-->
 
     <script src='assets/vendor/jquery/dist/jquery.min.js'></script>
     <script src='assets/vendor/json2/json2.js'></script>

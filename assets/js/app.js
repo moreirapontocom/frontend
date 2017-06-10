@@ -5,7 +5,7 @@ _.templateSettings = {
 var MyBlog = new Marionette.Application();
 
 MyBlog.addRegions({
-    mainRegion: '#main-region'
+    mainRegion: '#js-main-region'
 });
 
 var API = {
@@ -18,9 +18,10 @@ var API = {
             // Instancio a collection de ItemViews
             // A collection posts vem lá da promise()
             var list = new MyBlog.listPosts({
-                collection: MyBlog.posts
+                collection: posts
             });
 
+            Backbone.history.navigate('/');
             MyBlog.mainRegion.show( list );
 
         });
@@ -29,6 +30,11 @@ var API = {
 
     listSinglePost: function(model) {
 
+        var singleModel = Backbone.Model.extend({});
+        var singleCollection = Backbone.Collection.extend({
+            model: singleModel
+        });
+
         var single = Marionette.ItemView.extend({
             template: '#single-post-full-template'
         });
@@ -36,13 +42,12 @@ var API = {
             childView: single
         });
 
-        var collection = new MyBlog.myCollection( model );
+        var collection = new singleCollection( model );
         var view = new viewCollection({
             collection: collection
         });
 
         Backbone.history.navigate( model.id );
-
         MyBlog.mainRegion.show( view );
 
     }
@@ -61,13 +66,6 @@ MyBlog.Router =  Marionette.AppRouter.extend({
         API.listSinglePost(model);
     }
 });
-
-// ItemView Loading
-MyBlog.loadingView = Marionette.ItemView.extend({
-    template: '#loading-template'
-});
-var theLoadingView = new MyBlog.loadingView();
-MyBlog.mainRegion.show( theLoadingView );
 
 // Model
 MyBlog.myModel = Backbone.Model.extend({
@@ -111,7 +109,6 @@ MyBlog.myItemView = Marionette.ItemView.extend({
         e.stopPropagation();
 
         API.listSinglePost( this.model );
-
     }
 });
 
@@ -124,22 +121,22 @@ MyBlog.listPosts = Marionette.CollectionView.extend({
 
 
 
-MyBlog.posts;
+var posts;
 var defer = $.Deferred();
 MyBlog.fetchPosts = function() {
 
-    if ( !MyBlog.posts || MyBlog.posts == '' ) {
+    if ( !posts || posts == '' ) {
 
-        MyBlog.posts = new MyBlog.myCollection();
-        MyBlog.posts.fetch({
+        posts = new MyBlog.myCollection();
+        posts.fetch({
             method: 'GET',
             dataType: 'jsonp',
             processData: false,
             url: 'http://api.lucasmoreira.com.br/post',
             success: function(collection, response, options) {
 
-                MyBlog.posts = response;
-                defer.resolve( MyBlog.posts );
+                posts = response;
+                defer.resolve( posts );
 
                 return defer.promise();
 
@@ -150,15 +147,23 @@ MyBlog.fetchPosts = function() {
         });
     
     } else
-        return MyBlog.posts;
+        return posts;
 
 }
 
 
 MyBlog.on('start', function() {
+
+    // ItemView Loading
+    MyBlog.loadingView = Marionette.ItemView.extend({
+        template: '#loading-template'
+    });
+    var theLoadingView = new MyBlog.loadingView();
+    MyBlog.mainRegion.show( theLoadingView );
+
     if ( Backbone.history )
         Backbone.history.start();
-    
+
     if ( Backbone.history.fragment == '' )
         API.listAllPosts();
     else
