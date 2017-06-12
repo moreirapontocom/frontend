@@ -19,25 +19,10 @@ var API = {
         var fetch = MyBlog.fetchPosts();
         $.when( fetch ).done(function() {
 
-            console.log('fez o fetch: ', posts);
-
-            // var singleModel = new MyBlog.myModel( posts );
-            var singleCollection = new MyBlog.myCollection({
-                model: posts
-            });
-
-            // var theItem = new MyBlog.myItemView({
-            //     template: '#single-post-in-list-template',
-            //     events: {
-            //         'click .js-read-more': 'openSinglePost'
-            //     },
-            //     openSinglePost: function(model) {
-            //         console.log( 'API, model: ', model );
-            //     }
-            // });
+            // O fetch retorna uma collection de models (Backbone.Collection)
 
             var itens = new MyBlog.collectionViews({
-                collection: singleCollection
+                collection: posts
             });
 
             MyBlog.mainRegion.show( itens );
