@@ -1,16 +1,18 @@
-// MyBlog.Router =  Marionette.AppRouter.extend({
-//     appRoutes: {
-//         '': 'listPosts',
-//         ':post_name': 'listSingle'
-//     },
+MyBlog.Router =  Marionette.AppRouter.extend({
+    appRoutes: {
+        '': 'listPosts',
+        ':post_name': 'listSingle'
+    },
 
-//     listPosts: function() {
-//         API.listAllPosts();
-//     },
-//     listSingle: function(model) {
-//         API.listSinglePost(model);
-//     }
-// });
+    listPosts: function() {
+        console.log('router');
+        API.listAllPosts();
+    },
+    listSingle: function(model) {
+        console.log('router, single');
+        API.listSinglePost(model);
+    }
+});
 
 var API = {
 
@@ -51,9 +53,29 @@ var API = {
 
     listSinglePost: function(model) {
 
-        if ( !posts || posts === undefined )
-            console.log('Fetch all posts');
-        else {
+        var post_id = model
+
+        if ( !posts || posts === undefined ) {
+
+            var fetchOne = MyBlog.fetchSingle( post_id );
+            $.when( fetchOne ).done(function() {
+
+                var itemView = Marionette.ItemView.extend({
+                    template: '#single-post-full-template'
+                });
+                var collectionView = Marionette.CollectionView.extend({
+                    childView: itemView
+                });
+
+                var theView = new collectionView({
+                    collection: singlePost
+                });
+
+                MyBlog.mainRegion.show( theView );
+
+            });
+
+        } else {
 
             var single = new MyBlog.myCollection( model );
             var showSingle = single.get( model.id );
@@ -89,3 +111,13 @@ var API = {
 
     }
 }
+
+MyBlog.addInitializer(function() {
+    console.log('initializer');
+    if ( Backbone.history )
+        Backbone.history.start();
+
+    new MyBlog.Router({
+        controller: API
+    });
+});

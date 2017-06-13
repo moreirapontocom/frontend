@@ -19,9 +19,9 @@ MyBlog.on('start', function() {
 
 
     if ( Backbone.history )
-        Backbone.history.start();
+        Backbone.history.start({ pushState: false });
 
-    if ( Backbone.history.fragment == '' )
+    if ( Backbone.history.fragment === '' )
         API.listAllPosts();
     else
         API.listSinglePost( Backbone.history.fragment );
