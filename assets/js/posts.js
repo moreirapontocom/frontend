@@ -21,9 +21,10 @@ MyBlog.module('Posts', function(Posts, MyBlog, Backbone, Marionette, $, _) {
 
     MyBlog.on('posts:get:single', function(post_name) {
 
-        Backbone.history.navigate( post_name );
+        // Backbone.history.navigate( post_name );
 
-        console.log('posts.js - Get single: ', post_name);
+        var fetch = MyBlog.request('entities:get:single', post_name);
+
     });
 
 });

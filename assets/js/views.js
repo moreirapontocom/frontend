@@ -8,7 +8,7 @@ MyBlog.module('Views', function(Views, MyBlog, Backbone, Marionette, $, _) {
             'click .js-read-more': 'openPost'
         },
         openPost: function() {
-            console.log('(views.js) Open the post: ', this.model);
+            MyBlog.trigger('posts:get:single', this.id);
         }
     });
 
@@ -19,6 +19,7 @@ MyBlog.module('Views', function(Views, MyBlog, Backbone, Marionette, $, _) {
         childView: Views.listItemView
     });
 
+    // 
 
     // Single ItemView
     Views.singleMyItemView = Marionette.ItemView.extend({
