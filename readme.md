@@ -15,8 +15,11 @@
 ## How to install
 
 $ git clone url-project.git
+
 $ cd url-project
+
 $ npm install
+
 $ bower install
 
 You're done! 
