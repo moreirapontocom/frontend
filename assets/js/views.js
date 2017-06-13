@@ -7,8 +7,8 @@ MyBlog.module('Views', function(Views, MyBlog, Backbone, Marionette, $, _) {
         events: {
             'click .js-read-more': 'openPost'
         },
-        openPost: function(post_name) {
-            console.log('(views.js) Open the post: ', post_name);
+        openPost: function() {
+            console.log('(views.js) Open the post: ', this.model);
         }
     });
 
