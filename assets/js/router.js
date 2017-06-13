@@ -5,11 +5,11 @@ MyBlog.Router =  Marionette.AppRouter.extend({
     },
 
     listPosts: function() {
-        console.log('router');
+        console.log('router listPosts()');
         API.listAllPosts();
     },
     listSingle: function(model) {
-        console.log('router, single');
+        console.log('router listSingle(model)');
         API.listSinglePost(model);
     }
 });
@@ -18,37 +18,53 @@ var API = {
 
     listAllPosts: function() {
 
-        var fetch = MyBlog.fetchPosts();
-        $.when( fetch ).done(function() {
+        if ( !posts || posts === undefined ) {
 
-            // Defining ItemView
-            var myItemView = Marionette.ItemView.extend({
-                template: '#single-post-in-list-template',
-                tagName: 'li',
-                events: {
-                    'click .js-read-more': 'openSingle'
-                },
-                openSingle: function(e) {
-                    e.preventDefault();
-                    API.listSinglePost( this.model );
-                }
+            var fetch = MyBlog.fetchPosts();
+            $.when( fetch ).done(function() {
+
+                // Defining ItemView
+                var myItemView = Marionette.ItemView.extend({
+                    template: '#single-post-in-list-template',
+                    tagName: 'li',
+                    events: {
+                        'click .js-read-more': 'openSingle'
+                    },
+                    openSingle: function(e) {
+                        e.preventDefault();
+                        API.listSinglePost( this.model );
+                    }
+                });
+
+                // Defining CollectionView
+                var collectionViews = Marionette.CollectionView.extend({
+                    tagName: 'ul',
+                    className: 'post-list',
+                    childView: myItemView
+                });
+
+                // Instancing CollectionView passing Collection of models (from fetch)
+                var views = new collectionViews({
+                    collection: posts
+                });
+
+                MyBlog.mainRegion.show( views );
+
             });
 
-            // Defining CollectionView
-            var collectionViews = Marionette.CollectionView.extend({
-                tagName: 'ul',
-                className: 'post-list',
-                childView: myItemView
-            });
+        } else {
 
-            // Instancing CollectionView passing Collection of models (from fetch)
-            var views = new collectionViews({
-                collection: posts
+            var collection = new MyBlog.myCollection( posts );
+
+            var views = new MyBlog.collectionViews({
+                collection: collection
             });
 
             MyBlog.mainRegion.show( views );
 
-        });
+        }
+
+        Backbone.history.navigate('/');
 
     },
 
@@ -72,7 +88,7 @@ var API = {
                     collection: singlePost
                 });
 
-                Backbone.history.navigate( post_id );
+                var navigate_to = post_id;
 
                 MyBlog.mainRegion.show( theView );
 
@@ -83,7 +99,7 @@ var API = {
             var single = new MyBlog.myCollection( model );
             var showSingle = single.get( model.id );
 
-            Backbone.history.navigate( model.id );
+            var navigate_to = model.id;
 
             // 
 
@@ -111,6 +127,8 @@ var API = {
             MyBlog.mainRegion.show( collectionViews );
 
         }
+
+        Backbone.history.navigate( navigate_to );
 
     }
 }
