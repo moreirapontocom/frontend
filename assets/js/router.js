@@ -1,5 +1,5 @@
 MyBlog.Router =  Marionette.AppRouter.extend({
-    appRoutes: {
+    routes: {
         '': 'listPosts',
         ':post_name': 'listSingle'
     },
