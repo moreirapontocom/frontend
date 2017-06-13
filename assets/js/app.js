@@ -17,7 +17,6 @@ MyBlog.on('start', function() {
     });
     MyBlog.mainRegion.show( theLoadingView );
 
-
     if ( Backbone.history )
         Backbone.history.start({ pushState: false });
 

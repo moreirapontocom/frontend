@@ -28,7 +28,8 @@ var API = {
                 events: {
                     'click .js-read-more': 'openSingle'
                 },
-                openSingle: function() {
+                openSingle: function(e) {
+                    e.preventDefault();
                     API.listSinglePost( this.model );
                 }
             });
@@ -70,6 +71,8 @@ var API = {
                 var theView = new collectionView({
                     collection: singlePost
                 });
+
+                Backbone.history.navigate( post_id );
 
                 MyBlog.mainRegion.show( theView );
 
@@ -114,10 +117,9 @@ var API = {
 
 MyBlog.addInitializer(function() {
     console.log('initializer');
-    if ( Backbone.history )
-        Backbone.history.start();
 
     new MyBlog.Router({
         controller: API
     });
+
 });
