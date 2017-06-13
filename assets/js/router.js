@@ -5,11 +5,11 @@ MyBlog.Router =  Marionette.AppRouter.extend({
     },
 
     listPosts: function() {
-        console.log('router listPosts()');
+        // console.log('router listPosts()');
         API.listAllPosts();
     },
     listSingle: function(model) {
-        console.log('router listSingle(model)');
+        // console.log('router listSingle(model)');
         API.listSinglePost(model);
     }
 });
@@ -54,9 +54,31 @@ var API = {
 
         } else {
 
-            var collection = new MyBlog.myCollection( posts );
+            var model = Backbone.Model.extend({});
+            var collection = Backbone.Collection.extend({
+                model: model
+            });
 
-            var views = new MyBlog.collectionViews({
+            var itemView = Marionette.ItemView.extend({
+                template: '#single-post-in-list-template',
+                tagName: 'li',
+                events: {
+                    'click .js-read-more': 'openSingle'
+                },
+                openSingle: function(e) {
+                    e.preventDefault();
+                    API.listSinglePost( this.model );
+                }
+            });
+            var collectionView = Marionette.CollectionView.extend({
+                tagName: 'ul',
+                className: 'post-list',
+                childView: itemView
+            });
+
+            var collection = new collection( posts );
+
+            var views = new collectionView({
                 collection: collection
             });
 
@@ -64,7 +86,7 @@ var API = {
 
         }
 
-        Backbone.history.navigate('/');
+        Backbone.history.navigate('');
 
     },
 
