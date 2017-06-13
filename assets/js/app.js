@@ -5,24 +5,19 @@ _.templateSettings = {
 var MyBlog = new Marionette.Application();
 
 MyBlog.addRegions({
-    mainRegion: '#js-main-region'
+    mainRegion: '.js-main-region'
 });
 
 MyBlog.on('start', function() {
 
-    // ItemView Loading
-    MyBlog.loadingView = Marionette.ItemView.extend({});
-    var theLoadingView = new MyBlog.loadingView({
-        template: '#loading-template'
-    });
-    MyBlog.mainRegion.show( theLoadingView );
+    MyBlog.Loading.Show.loading();
 
     if ( Backbone.history )
         Backbone.history.start({ pushState: false });
 
     if ( Backbone.history.fragment === '' )
-        API.listAllPosts();
+        MyBlog.trigger('posts:get:all');
     else
-        API.listSinglePost( Backbone.history.fragment );
+        MyBlog.trigger('posts:get:single', Backbone.history.fragment);
 
 });
