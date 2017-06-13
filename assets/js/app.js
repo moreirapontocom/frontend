@@ -21,9 +21,9 @@ MyBlog.on('start', function() {
     if ( Backbone.history )
         Backbone.history.start();
 
-    // if ( Backbone.history.fragment == '' )
+    if ( Backbone.history.fragment == '' )
         API.listAllPosts();
-    // else
-    //     API.listSinglePost( Backbone.history.fragment );
+    else
+        API.listSinglePost( Backbone.history.fragment );
 
 });

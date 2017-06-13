@@ -27,7 +27,7 @@ var API = {
                     'click .js-read-more': 'openSingle'
                 },
                 openSingle: function() {
-                    console.log('open: ', this.model);
+                    API.listSinglePost( this.model );
                 }
             });
 
@@ -51,7 +51,41 @@ var API = {
 
     listSinglePost: function(model) {
 
-        console.log('Exibe o post único: ', model);
+        if ( !posts || posts === undefined )
+            console.log('Fetch all posts');
+        else {
+
+            var single = new MyBlog.myCollection( model );
+            var showSingle = single.get( model.id );
+
+            Backbone.history.navigate( model.id );
+
+            // 
+
+            // Defining Collection of models
+            var collection = Backbone.Collection.extend({});
+
+            // Defining ItemView
+            var itemView = Marionette.ItemView.extend({
+                template: '#single-post-full-template'
+            });
+
+            // Defining Collection of views
+            var collectionView = Marionette.CollectionView.extend({
+                childView: itemView
+            });
+
+            // Instancing collection of models passing the model (single-selected model)
+            var theModel = new collection( showSingle );
+
+            // Instancing the collection of views passing the collection of models to display
+            var collectionViews = new collectionView({
+                collection: theModel
+            });
+
+            MyBlog.mainRegion.show( collectionViews );
+
+        }
 
     }
 }
