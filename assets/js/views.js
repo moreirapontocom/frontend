@@ -8,7 +8,7 @@ MyBlog.module('Views', function(Views, MyBlog, Backbone, Marionette, $, _) {
             'click .js-read-more': 'openPost'
         },
         openPost: function() {
-            MyBlog.trigger('posts:get:single', this.id);
+            MyBlog.trigger('posts:get:selected', this.model);
         }
     });
 
@@ -23,7 +23,7 @@ MyBlog.module('Views', function(Views, MyBlog, Backbone, Marionette, $, _) {
 
     // Single ItemView
     Views.singleMyItemView = Marionette.ItemView.extend({
-        template: '#single-post-in-list-template',
+        template: '#single-post-full-template',
         tagName: 'li'
     });
 

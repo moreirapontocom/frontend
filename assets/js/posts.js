@@ -19,11 +19,18 @@ MyBlog.module('Posts', function(Posts, MyBlog, Backbone, Marionette, $, _) {
 
     });
 
-    MyBlog.on('posts:get:single', function(post_name) {
+    MyBlog.on('posts:get:selected', function(model) {
 
-        // Backbone.history.navigate( post_name );
+        Backbone.history.navigate( model.id );
 
-        var fetch = MyBlog.request('entities:get:single', post_name);
+        var fetch = MyBlog.request('entities:get:selected', model);
+
+        var collection = new MyBlog.Entities.postCollection( fetch );
+        var item = new MyBlog.Views.singleCollectionViews({
+            collection: collection
+        });
+
+        MyBlog.mainRegion.show( item );
 
     });
 

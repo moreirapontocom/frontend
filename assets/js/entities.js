@@ -62,42 +62,14 @@ MyBlog.module('Entities', function(Entities, MyBlog, Backbone, Marionette, $, _)
                 return posts;
         },
 
+        fetchSelected: function(model) {
+
+            if ( model && model !== undefined )
+                return model;
+
+        },
+
         fetchSingle: function(post_name) {
-
-            // Make sure that posts already exists
-
-            if ( !posts || posts === undefined ) {
-
-                console.log('posts DONT exists. Fetch single: ', post_name);
-
-                // var thePost;
-                // var deferPost = $.Deferred();
-
-                // thePost = new Entities.postCollection();
-                // thePost.fetch({
-                //     method: 'GET',
-                //     dataType: 'jsonp',
-                //     processData: false,
-                //     url: 'http://api.lucasmoreira.com.br/post/' + post_name,
-                //     success: function(collection, response, options) {
-
-                //         thePost = response;
-                //         deferPost.resolve( thePost );
-
-                //     },
-                //     error: function(err, xhr) {
-                //         console.log('error');
-                //     }
-                // });
-
-                // return deferPost.promise();
-
-            } else {
-
-                // get the existent $posts > get() > display
-                console.log('posts already exists. Just get() the correct model and display it');
-
-            }
 
         }
     
@@ -105,6 +77,10 @@ MyBlog.module('Entities', function(Entities, MyBlog, Backbone, Marionette, $, _)
 
     MyBlog.reqres.setHandler('entities:get:posts', function() {
         return API.fetchPosts();
+    });
+
+    MyBlog.reqres.setHandler('entities:get:selected', function(model) {
+        return API.fetchSelected(model);
     });
 
     MyBlog.reqres.setHandler('entities:get:single', function(post_name) {
