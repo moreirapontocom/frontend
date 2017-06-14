@@ -41,7 +41,13 @@ module.exports = function(grunt) {
 					   'assets/vendor/backbone/backbone.js',
 					   'assets/vendor/backbone.marionette/lib/backbone.marionette.min.js',
 					   'assets/vendor/bounce.js/bounce.min.js',
-					   'assets/js/app.js'
+
+					   'assets/js/app.js',
+					   'assets/js/entities.js',
+					   'assets/js/router.js',
+					   'assets/js/views.js',
+					   'assets/js/posts.js',
+					   'assets/js/loading.js'
 					 ]
 				}
 			}

@@ -10,6 +10,17 @@
 @read-more-font-size: 15px;
 @border-radius: 3px;
 
+html, body {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#455a64+0,607d8b+100 */
+    // background-color: @primary-color-dark;
+    background: @primary-color-dark;
+    background: -webkit-linear-gradient(@primary-color-dark 0%, @primary-color 100%);
+    background: -moz-linear-gradient(@primary-color-dark 0%, @primary-color 100%);
+    background: -o-linear-gradient(@primary-color-dark 0%, @primary-color 100%);
+    background: linear-gradient(@primary-color-dark 0%, @primary-color 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@primary-color-dark', endColorstr='@primary-color',GradientType=0 );
+}
+
 body {
     font-family: 'Times New Roman', Times, serif;
     margin: 0;
@@ -23,18 +34,9 @@ body {
 }
 
 header {
-    background-color: @primary-color;
     color: @primary-color-light;
     padding: 50px;
     height: 100vh;
-
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#455a64+0,607d8b+100 */
-    background: @primary-color-dark;
-    background: -webkit-linear-gradient(@primary-color-dark 0%, @primary-color 100%);
-    background: -moz-linear-gradient(@primary-color-dark 0%, @primary-color 100%);
-    background: -o-linear-gradient(@primary-color-dark 0%, @primary-color 100%);
-    background: linear-gradient(@primary-color-dark 0%, @primary-color 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@primary-color-dark', endColorstr='@primary-color',GradientType=0 );
 
     & h1 {
         font-size: 3em;
@@ -58,7 +60,6 @@ header {
         padding: 0;
         margin: 0;
         overflow: hidden;
-        height: 55px;
     }
     & .socials li a,
     & .socials li a:link {
@@ -87,7 +88,6 @@ header {
         background-color: @text-color;
         color: @primary-color-dark;
         text-decoration: none;
-        box-shadow: @primary-color-dark 1px 5px;
         transition: all .2s ease-in-out;
         -moz-transition: all .2s ease-in-out;
     }
@@ -101,6 +101,7 @@ header {
     padding: 50px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1em;
+    background-color: white;
 
     .post-list {
         padding: 0;
@@ -110,7 +111,12 @@ header {
             list-style: none;
             padding: 0;
             margin: 0;
-            margin-bottom: 100px;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            display: block;
+            height: auto;
+            overflow: hidden;
+            border-bottom: solid 1px @divider-color;
 
             &:last-child {
                 margin-bottom: 0;
@@ -127,6 +133,8 @@ header {
 
                 & .btn-read-more {
                     font-size: @read-more-font-size;
+                    text-decoration: none;
+                    display: inline-block;
                 }
             }
         }
@@ -137,9 +145,22 @@ header {
             font-weight: normal;
             font-family: 'Times New Roman', Times, serif;
             font-weight: bold;
+
+            &.single-title {
+                font-size: 2em;
+                margin-bottom: 20px;
+            }
+        }
+        div.single-title-bar {
+            height: 5px;
+            width: 30%;
+            background-color: @accent-color;
+            margin-bottom: 40px;
         }
         & summary {
             text-align: justify;
+            display: block;
+            margin-bottom: 15px;
         }
         & .btn-read-more {
             background-color: @accent-color;
@@ -149,9 +170,18 @@ header {
             font-size: @read-more-font-size;
             padding: 10px 20px;
             border: none;
-            margin-top: 30px;
             cursor: pointer;
             font-weight: bold;
+            text-decoration: none;
+            transition: all .2s ease-in-out;
+            -moz-transition: all .2s ease-in-out;
+            display: inline-block;
+
+            &:hover {
+                background-color: darken( @accent-color, 20% );
+                transition: all .2s ease-in-out;
+                -moz-transition: all .2s ease-in-out;
+            }
         }
 
     }
@@ -193,6 +223,12 @@ footer {
             -webkit-animation: animation 1000ms linear infinite both;
             animation: animation 1000ms linear infinite both;
         }
+    }
+}
+
+@media all and ( max-width: 375px ) {
+    header {
+        padding: 10px;
     }
 }
 
