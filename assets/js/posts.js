@@ -34,4 +34,28 @@ MyBlog.module('Posts', function(Posts, MyBlog, Backbone, Marionette, $, _) {
 
     });
 
+    MyBlog.on('posts:get:single', function(post_name) {
+
+        Backbone.history.navigate( post_name );
+
+        var fetch = MyBlog.request('entities:get:posts');
+
+        $.when( fetch ).done(function(posts) {
+
+            var list = new MyBlog.Entities.postCollection( posts );
+            var list = list.get( post_name );
+
+            // 
+
+            var list_ready = new MyBlog.Entities.postCollection( list );
+            var view = new MyBlog.Views.singleCollectionViews({
+                collection: list_ready
+            });
+
+            MyBlog.mainRegion.show( view );
+
+        });
+
+    });
+
 });
